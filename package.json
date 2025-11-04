@@ -1,0 +1,18 @@
+{
+  "name": "myplaywright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.2",
+    "allure-playwright": "^3.4.2",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.3",
+    "xlsx": "^0.18.5"
+  }
+}
