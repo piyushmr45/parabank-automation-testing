@@ -1,66 +1,106 @@
-# myPlaywright — ParaBank E2E
+ParaBank Automation Testing Project
 
-This repository contains Playwright end-to-end tests against the ParaBank demo site. It includes a complete E2E flow (registration, login, open account, transfer, bill pay) optimized for reproducible runs and CI.
+This repository contains an end-to-end (E2E) test automation framework for the [ParaBank demo application](https://parabank.parasoft.com/). It is built using Playwright, JavaScript, and the Page Object Model (POM) design pattern.
 
-What I changed to make this project ready
-- Defensive global setup removed (tests run their own login/registration flows).
-- Tests support a seeded-account mode (recommended for CI) or dynamic registration per run.
-- Diagnostics written to `test-results/diagnostics/` on failure (HTML + screenshot).
-- Added convenient npm scripts and a `.gitignore` that excludes generated artifacts and secrets.
+✨ Features
 
-Quick start (Windows PowerShell)
+* Page Object Model (POM): Tests are organized using POM for clean, maintainable, and reusable code.
+* Data-Driven: Test data for login and bill pay is externalized into JSON files (in the `/data` folder).
+* CI/CD Integration: Includes a GitHub Actions workflow (`.github/workflows/playwright.yml`) that automatically runs tests on every push and pull request.
+* Reporting: Integrated with Allure for detailed and interactive test reports.
+* Authentication: Uses Playwright's global setup (`global-setup.js`) to log in once and save the authentication state, speeding up test execution.
 
-1) Install dependencies
+🧪 Automated Test Scenarios
 
-```powershell
-npm ci
-```
+This framework covers the following key user flows:
 
-2) Provide environment variables
+* User Registration
+* Login and Logout
+* Bill Payment
+* Fund Transfer
+* Open New Account
 
-- Option A (recommended for CI and stable runs): set seeded credentials and skip registration
+🛠️ Tech Stack
 
-  - Add to `.env` or set environment variables in CI:
+* Framework: [Playwright](https://playwright.dev/)
+* Language: JavaScript
+* Reporting: [Allure Report](https://allure.qatools.com/)
+* CI/CD: [GitHub Actions](https://github.com/features/actions)
 
-    SEED_USERNAME=your_test_user
-    SEED_PASSWORD=your_test_password
-    SKIP_REGISTRATION=true
+🚀 How to Run Locally
 
-  Then run:
+# Prerequisites
 
-```powershell
-npm test
-```
+* [Node.js](https://nodejs.org/en/) (v18 or higher)
+* Git
 
-- Option B: run registration-per-run (useful for local exploratory runs). Ensure `BASE_URL` points to the site under test.
+# 1. Setup
 
-  - `.env` example (already present in repo):
-    BASE_URL=https://parabank.parasoft.com/parabank/index.htm
-    USERNAME=piyush
-    PASSWORD=p
+1.  Clone the repository:
+    ```bash
+    git clone [https://github.com/piyushmr45/parabank-automation-testing.git](https://github.com/piyushmr45/parabank-automation-testing.git)
+    cd parabank-automation-testing
+    ```
 
-  - Run (headed):
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
 
-```powershell
-npm run test:headed
-```
+3.  Install Playwright browsers:
+    ```bash
+    npx playwright install
+    ```
 
-Diagnostics
-- If a test fails, diagnostics are saved in `test-results/diagnostics/` (HTML + PNG). These are ephemeral and intentionally ignored by git.
+4.  Set up environment variables:
+    This project uses a `.env` file for sensitive data like login credentials. Create your own `.env` file in the project root.
+    ```
+    # .env file
+    USER_NAME="your_username"
+    USER_PASSWORD="your_password"
+    ```
 
-CI recommendations
-- Use seeded credentials (set `SEED_USERNAME`/`SEED_PASSWORD` and `SKIP_REGISTRATION=true`) to avoid flaky registration flows.
-- Do not commit generated artifacts (`allure-results`, `playwright-report`, `test-results`, `playwright/.auth`). These are now in `.gitignore`.
+# 2. Running Tests
 
-Troubleshooting
-- Many failures we observed were caused by the remote ParaBank demo returning an "internal error" page during registration or login. That is a server-side issue and outside the test runner's control.
-- Two reliable approaches:
-  1. Use seeded credentials so tests skip registration.
-  2. Run a local/mock server (I can add a static mock site if you'd like) so your CV demo is deterministic.
+You can run the tests using several commands:
 
-If you'd like, I can:
-- Add a lightweight mock server and a config switch (DEV/CI) so tests can run offline.
-- Create a sample GitHub Actions workflow that runs tests and uploads `allure-results` as artifacts.
+* Run all tests (headless):
+    ```bash
+    npx playwright test
+    ```
 
----
-If you want me to commit these changes to git and initialize a repository (and optionally create a GitHub repo), tell me and I will do it for you.
+* Run all tests (headed mode):
+    ```bash
+    npx playwright test --headed
+    ```
+
+* Run a specific test file:
+    ```bash
+    npx playwright test tests/parabank-cv.spec.js
+    ```
+
+* Open Playwright UI Mode:
+    ```bash
+    npx playwright test --ui
+    ```
+
+# 3. View Allure Report
+
+After running the tests, you can generate and view the Allure report.
+
+1.  Run tests & generate results:
+    (The `npx playwright test` command will automatically create the `allure-results` directory)
+
+2.  Generate the HTML report:
+    ```bash
+    npx allure generate allure-results --clean -o allure-report
+    ```
+
+3.  Open the report in your browser:
+    ```bash
+    npx allure open allure-report
+    ```
+
+# workflow-badge (GitHub Actions)
+
+The CI workflow is automatically triggered on every `push` and `pull_request` to the `main` branch. You can view the test runs, logs, and artifacts (including the Allure report) under the "Actions" tab of this repository.
