@@ -1,8 +1,8 @@
-# myPlaywright — ParaBank E2E (CV-friendly)
+# myPlaywright — ParaBank E2E
 
 This repository contains Playwright end-to-end tests against the ParaBank demo site. It includes a complete E2E flow (registration, login, open account, transfer, bill pay) optimized for reproducible runs and CI.
 
-What I changed to make this project CV/CI-ready
+What I changed to make this project ready
 - Defensive global setup removed (tests run their own login/registration flows).
 - Tests support a seeded-account mode (recommended for CI) or dynamic registration per run.
 - Diagnostics written to `test-results/diagnostics/` on failure (HTML + screenshot).
